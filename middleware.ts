@@ -17,6 +17,11 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const onDefaultRedirectPage = nextUrl.pathname === DEFAULT_LOGIN_REDIRECT;
 
+  // Bypass middleware for API routes, including your stripe webhook
+  if (nextUrl.pathname.startsWith('/api/')) {
+    return;
+  }
+
   // If the user is accessing an auth route and they are not logged in, redirect them to the login page
   if (isAuthRoute && !isLoggedIn) {
     return Response.redirect(new URL('/', nextUrl));
